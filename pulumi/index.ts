@@ -90,14 +90,14 @@ const eksCluster = new eks.Cluster(`${stackName}-cluster`, {
     "name": stackName,
   },
 },{
-  transformations: [args => {
-    if (args.type === "aws:eks/cluster:Cluster") {
-      args.props["accessConfig"] = {
-        authenticationMode: "API_AND_CONFIG_MAP"
-      };
-    }
-    return undefined;
-  }]
+  // transformations: [args => {
+  //   if (args.type === "aws:eks/cluster:Cluster") {
+  //     args.props["accessConfig"] = {
+  //       authenticationMode: "CONFIG_MAP"  //TODO investigate how to make it work with API_AND_CONFIG_MAP
+  //     };
+  //   }
+  //   return undefined;
+  // }]
 })
 
 outputs.clusterName = eksCluster.eksCluster.name

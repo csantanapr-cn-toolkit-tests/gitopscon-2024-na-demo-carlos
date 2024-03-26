@@ -9,5 +9,6 @@ config:
   clusterType: "hub"
   implementationType: "github"
   environment: ops
+  veleroBucketPrefix: gitopscon-na-24-velero-backups-carlos
   clusterComponents:
     enable_velero: "true"

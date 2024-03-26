@@ -10,5 +10,6 @@ config:
   secretPath: "gitops/clusters/prod-cluster.yaml"
   implementationType: "github"
   environment: prod
+  veleroBucketPrefix: gitopscon-na-24-velero-backups-carlos
   clusterComponents:
     enable_velero: "true"
