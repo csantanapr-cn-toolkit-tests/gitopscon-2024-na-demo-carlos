@@ -12,12 +12,12 @@ spec:
     namespace: argocd
     server: https://kubernetes.default.svc
   sources:
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+    - repoURL: https://github.com/csantanapr/gitopscon-2024-na-demo-carlos
       path: gitops/bootstrap
       targetRevision: HEAD
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+    - repoURL: https://github.com/csantanapr/gitopscon-2024-na-demo-carlos
       path: gitops/clusters
       targetRevision: HEAD
-    - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+    - repoURL: https://github.com/csantanapr/gitopscon-2024-na-demo-carlos
       path: gitops/addons
       targetRevision: HEAD

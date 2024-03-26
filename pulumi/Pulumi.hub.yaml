@@ -1,9 +1,9 @@
 config:
   aws:region: us-east-1
-  awsAccountId: "753080021511"
+  awsAccountId: "015299085168"
   cidrBlock: 10.0.0.0/16
-  githubOrg: "gitops-bridge-dev"
-  githubRepo: "gitopscon-2024-na-demo"
+  githubOrg: "csantanapr"
+  githubRepo: "gitopscon-2024-na-demo-carlos"
   secretPath: "gitops/clusters/hub-cluster.yaml"
   name: "hub"
   clusterType: "hub"

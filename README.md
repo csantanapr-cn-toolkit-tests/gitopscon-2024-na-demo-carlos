@@ -1,4 +1,4 @@
-# gitopscon-2024-na-demo
+# gitopscon-2024-na-demo-carlos
 
 ![Architecture Diagram of GitOps Flow with Gitops Bridge and Pulumi](assets/gitopscon-na24.png)
 

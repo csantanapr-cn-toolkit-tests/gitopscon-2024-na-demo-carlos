@@ -18,10 +18,10 @@ jobs:
       # with access to deploy AWS resources in you account. The easiest method is attaching AdministratorAccess Policy to role.
       # See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services for details on implementing OIDC with Github Actions
       matrix:
-        arrays: [ 
-          stack: {name: "hub", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
-          stack: {name: "dev", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
-          stack: {name: "prod", iamRole: "arn:aws:iam::753080021511:role/pulumi-github-actions"}, 
+        arrays: [
+          stack: {name: "hub", iamRole: "arn:aws:iam::015299085168:role/pulumi-github-actions"},
+          stack: {name: "dev", iamRole: "arn:aws:iam::015299085168:role/pulumi-github-actions"},
+          stack: {name: "prod", iamRole: "arn:aws:iam::015299085168:role/pulumi-github-actions"},
         ]
     permissions:
       id-token: write

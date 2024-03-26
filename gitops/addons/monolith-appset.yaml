@@ -36,10 +36,10 @@ spec:
     spec:
       project: default
       sources:
-      - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+      - repoURL: https://github.com/csantanapr/gitopscon-2024-na-demo-carlos
         targetRevision: HEAD
         ref: values
-      - repoURL: https://github.com/gitops-bridge-dev/gitopscon-2024-na-demo
+      - repoURL: https://github.com/csantanapr/gitopscon-2024-na-demo-carlos
         targetRevision: HEAD
         path: gitops/charts/addons/monolith
         helm:

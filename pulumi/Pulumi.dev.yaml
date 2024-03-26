@@ -1,12 +1,12 @@
 config:
   aws:region: us-east-1
   cidrBlock: 10.0.0.0/16
-  awsAccountId: "753080021511"
+  awsAccountId: "015299085168"
   clusterType: "spoke"
   name: "dev"
-  hubStackName: "blakeromano/gitopscon-2024-na-demo/hub"
-  githubOrg: "gitops-bridge-dev"
-  githubRepo: "gitopscon-2024-na-demo"
+  hubStackName: "csantanapr/gitopscon-2024-na-demo-carlos/hub"
+  githubOrg: "csantanapr"
+  githubRepo: "gitopscon-2024-na-demo-carlos"
   secretPath: "gitops/clusters/dev-cluster.yaml"
   implementationType: "github"
   environment: staging
