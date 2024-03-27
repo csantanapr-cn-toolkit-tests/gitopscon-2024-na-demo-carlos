@@ -4,6 +4,7 @@ metadata:
   labels:
     argocd.argoproj.io/secret-type: cluster
     environment: staging
+    enable_app: 'true'
     enable_velero: 'true'
   annotations:
     aws_cluster_name: dev-cluster
