@@ -10,7 +10,7 @@ aws eks --region us-east-1 update-kubeconfig --name hub-cluster --alias hub-clus
 kubectl create namespace argocd --context hub-cluster || true
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --context hub-cluster
 
-kubectl annotate serviceaccount argocd-server argocd-application-controller \
+kubectl annotate serviceaccount argocd-server argocd-application-controller --overwrite \
     eks.amazonaws.com/role-arn=$ARGO_IAM_ROLE_ARN --namespace=argocd --context hub-cluster
 
 kubectl rollout restart deployment argocd-server -n argocd --context hub-cluster
