@@ -20,7 +20,10 @@ npm install
 1. Add any extra resources you may need in your given environment
 1. Run Pulumi Up for the Hub Cluster's Stack `pulumi up --stack hub`
 1. Wait for the Resources to create like VPC, EKS Cluster, and IAM permissions
-1. Run `./bootstrap.sh`
+1. Set environment variable before running next step
+  1. `export ARGO_IAM_ROLE_ARN=$(pulumi stack output -s hub -j | jq .outputs.argoRoleArn)
+1. Run `./bootstrap.sh` to install ArgoCD on Hub cluster
+
 
 
 ### How to Add Spoke Clusters:
