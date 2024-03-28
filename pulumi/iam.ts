@@ -1,20 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 
-export function createArgoRole(
-  config: pulumi.Config,
-  clusterName: string
-) {
-  if (config.require("clusterType") === "spoke") {
-    // Spoke Role
-    return createSpokeRole(config)
-  } else {
-    // Hub Role
-    return createHubRole(clusterName)
-  }
-}
-
-function createSpokeRole(config: pulumi.Config) {
+export function createSpokeRole(config: pulumi.Config) {
   const hubStack = new pulumi.StackReference("hub-argorole-ref", {
     name: config.require("hubStackName")
   })
@@ -36,7 +23,7 @@ function createSpokeRole(config: pulumi.Config) {
   })
 }
 
-function createHubRole(clusterName: string) {
+export function createHubRole(clusterName: pulumi.Output<string>) {
   const assumeRole = aws.iam.getPolicyDocument({
     statements: [{
       effect: "Allow",

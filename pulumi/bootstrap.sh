@@ -7,8 +7,9 @@ export AWS_PROFILE=default
 aws eks --region us-east-1 update-kubeconfig --name hub-cluster --alias hub-cluster
 
 # Install ArgoCD
-helm repo add argo https://argoproj.github.io/argo-helm
-helm repo upgrade --install argocd argo/argo-cd --namespace argocd --create-namespace
+helm repo add argo https://argoproj.github.io/argo-helm || true
+helm repo update
+helm upgrade --install argocd argo/argo-cd --namespace argocd --create-namespace
 
 kubectl create secret generic private-repo-creds -n argocd \
     --from-literal=username=REPLACE_USERNAME \

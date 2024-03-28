@@ -2,7 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as eks from "@pulumi/eks";
-import { createArgoRole } from "./iam"
+import { createHubRole } from "./iam"
+import { createSpokeRole } from "./iam"
 import { GitOpsClusterConfig } from "./github"
 import { createVeleroResources } from "./components"
 
@@ -54,7 +55,7 @@ const vpc = new awsx.ec2.Vpc("vpc", {
 // If we are creating a spoke cluster we need to create argoRole first, ensure it
 // gets added to auth mapping for the cluster with the correct permissions
 if (config.require("clusterType") === "spoke") {
-  const argoRole = createArgoRole(config, `${stackName}-cluster`)
+  const argoRole = createSpokeRole(config)
   roleMappings.push({
     roleArn: argoRole.arn,
     username: argoRole.arn,
@@ -117,7 +118,7 @@ outputs.veleroIamRoleArn = veleroIamRole.arn
 // If we are creating the hub cluster we need pods in eks cluster to be able to assume
 // so we need cluster created first
 if (config.require("clusterType") === "hub") {
-  const argoRole = createArgoRole(config, `${stackName}-cluster`)
+  const argoRole = createHubRole(eksCluster.eksCluster.name)
   outputs.argoRoleArn = argoRole.arn
 }
 
