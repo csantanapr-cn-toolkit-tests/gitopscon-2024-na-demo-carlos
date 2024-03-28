@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+    environment: ops
+    enable_velero: 'true'
+  annotations:
+    aws_cluster_name: hub-cluster
+    k8s_service_host: 1BA823B27182322F983FDAF84FEA430B.gr7.us-east-1.eks.amazonaws.com
+    velero_bucket_name: gitopscon-na-24-velero-backups-carlos-hub
+    velero_iam_role_arn: arn:aws:iam::015299085168:role/velero-role-274a43d
+  name: hub-cluster-secret
+  namespace: argocd
+type: Opaque
+stringData:
+  name: hub
+  server: https://kubernetes.default.svc
+data:
+  config: ewogICJ0bHNDbGllbnRDb25maWciOiB7CiAgICAiaW5zZWN1cmUiOiBmYWxzZQogIH0KfQo=
