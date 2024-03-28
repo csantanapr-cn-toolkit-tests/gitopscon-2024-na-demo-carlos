@@ -43,3 +43,4 @@ jobs:
         run: |
           echo "PULUMI_ACCESS_TOKEN = $PULUMI_ACCESS_TOKEN"
           echo "GITHUB_TOKEN = $GITHUB_TOKEN"
+          echo "foo"
