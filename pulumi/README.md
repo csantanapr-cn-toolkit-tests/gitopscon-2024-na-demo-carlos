@@ -36,7 +36,15 @@ npm install
 1. Wait for the Resources to create like VPC, EKS Cluster, and IAM permissions
 1. Apply the Secret resource that was added to the GitOps Repository
 1. Setup kubectl cli `aws eks --region us-east-1 update-kubeconfig --name dev-cluster --alias dev-cluster`
-1. Repeat for next cluster like `prod` `pulumi up --stack prod`
+1. Repeat same steps for the next cluster like `prod` `pulumi up --stack prod`
+
+### Destory Clusters
+```shell
+pulumi destroy --stack dev
+pulumi destroy --stack prod
+pulumi destroy --stack hub
+```
+
 
 ### Productionizing your Implementation
 

@@ -2,76 +2,88 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 
 export function createArgoRole(
-  awsAccountId: string, 
-  oidcProviderUrl: pulumi.Output<any>, 
   config: pulumi.Config,
-  ) {
+  clusterName: string
+) {
   if (config.require("clusterType") === "spoke") {
-    const hubStack = new pulumi.StackReference("hub-argorole-ref", {
-      name: config.require("hubStackName")
-    })
-    const outputs = hubStack.getOutput("outputs") as pulumi.Output<{[key: string]: string}>
-    const policy = outputs.apply((outputs) => JSON.stringify({
-      Version: "2012-10-17",
-      Statement: [
-        {
-          Effect: "Allow",
-          Principal: {
-            AWS: outputs.argoRoleArn
-          },
-          Action: "sts:AssumeRole"
-        }
-      ]
-    }))
-    return new aws.iam.Role("argo-role", {
-      assumeRolePolicy: policy
-    })
+    // Spoke Role
+    return createSpokeRole(config)
+  } else {
+    // Hub Role
+    return createHubRole(clusterName)
   }
-  return new aws.iam.Role("argo-role", {
-    inlinePolicies: [
+}
+
+function createSpokeRole(config: pulumi.Config) {
+  const hubStack = new pulumi.StackReference("hub-argorole-ref", {
+    name: config.require("hubStackName")
+  })
+  const outputs = hubStack.getOutput("outputs") as pulumi.Output<{ [key: string]: string }>
+  const policy = outputs.apply((outputs) => JSON.stringify({
+    Version: "2012-10-17",
+    Statement: [
       {
-        name: "Argo",
-        policy: JSON.stringify({
-          Version: "2012-10-17",
-          Statement: [
-            {
-              Sid: "ArgoSecrets",
-              Action: [
-                "secretsmanager:List*",
-                "secretsmanager:Read*"
-              ],
-              Resource: "*",
-              Effect: "Allow",
-            },
-            {
-              Sid: "AssumeRoles",
-              Action: [
-                "sts:AssumeRole"
-              ],
-              Resource: "*",
-              Effect: "Allow"
-            },
-          ],
-        })
+        Effect: "Allow",
+        Principal: {
+          AWS: outputs.argoRoleArn
+        },
+        Action: ["sts:AssumeRole", "sts:TagSession"]
       }
-    ],
-    assumeRolePolicy: oidcProviderUrl.apply(v => JSON.stringify({
-      Version: "2012-10-17",
-      Statement: [
-        {
-          Effect: "Allow",
-          Principal: {
-            Federated: `arn:aws:iam::${awsAccountId}:oidc-provider/${v}`
-          },
-          Action: "sts:AssumeRoleWithWebIdentity",
-          Condition: {
-            StringLike: {
-              [`${v}:sub`]: ["system:serviceaccount:argocd:argocd-application-controller", "system:serviceaccount:argocd:argocd-server"],
-              [`${v}:aud`]: "sts.amazonaws.com"
-            }
-          }
-        }
-      ]
-    }))
+    ]
+  }))
+  return new aws.iam.Role("argo-role", {
+    assumeRolePolicy: policy
   })
 }
+
+function createHubRole(clusterName: string) {
+  const assumeRole = aws.iam.getPolicyDocument({
+    statements: [{
+      effect: "Allow",
+      principals: [{
+        type: "Service",
+        identifiers: ["pods.eks.amazonaws.com"],
+      }],
+      actions: [
+        "sts:AssumeRole",
+        "sts:TagSession",
+      ],
+    }],
+  });
+
+  const iamRole = new aws.iam.Role("argo-hub-role", {
+    assumeRolePolicy: assumeRole.then(assumeRole => assumeRole.json),
+  });
+  const policy = aws.iam.getPolicyDocument({
+    statements: [{
+      effect: "Allow",
+      actions: ["sts:AssumeRole", "sts:TagSession"],
+      resources: ["*"],
+    }],
+  });
+  const policyPolicy = new aws.iam.Policy("argo-hub-role", {
+    policy: policy.then(policy => policy.json),
+  });
+  const rolePolicyAttachment = new aws.iam.RolePolicyAttachment("argo-hub-role", {
+    role: iamRole.name,
+    policyArn: policyPolicy.arn,
+  });
+
+
+  const controllerPodIdentityAssociation = new aws.eks.PodIdentityAssociation("argo-controller", {
+    clusterName: clusterName,
+    namespace: "argocd",
+    serviceAccount: "argocd-application-controller",
+    roleArn: iamRole.arn,
+  });
+
+  const apiPodIdentityAssociation = new aws.eks.PodIdentityAssociation("argo-server", {
+    clusterName: clusterName,
+    namespace: "argocd",
+    serviceAccount: "argocd-server",
+    roleArn: iamRole.arn,
+  });
+
+  return iamRole;
+}
+
