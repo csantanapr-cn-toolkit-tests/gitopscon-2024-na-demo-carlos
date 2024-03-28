@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to run tests against'
-        type: environment
+        description: 'run?'
+        type: boolean
         required: true
 env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
