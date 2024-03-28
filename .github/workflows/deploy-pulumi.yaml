@@ -5,6 +5,12 @@ on:
       - main
     paths:
       - pulumi/**
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
 env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.PULUMI_GITHUB_TOKEN }}
