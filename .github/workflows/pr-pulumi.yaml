@@ -25,17 +25,21 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v2
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ matrix.arrays.stack.iamRole }}
-          aws-region: us-east-2
-      - run: |
-          cd ./pulumi
-          npm install
-      - uses: pulumi/actions@v3
-        with:
-          color: auto
-          command: preview
-          work-dir: ./pulumi
-          stack-name: ${{ matrix.arrays.stack.name }}
+      # - name: configure aws credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     role-to-assume: ${{ matrix.arrays.stack.iamRole }}
+      #     aws-region: us-east-2
+      # - run: |
+      #     cd ./pulumi
+      #     npm install
+      # - uses: pulumi/actions@v3
+      #   with:
+      #     color: auto
+      #     command: preview
+      #     work-dir: ./pulumi
+      #     stack-name: ${{ matrix.arrays.stack.name }}
+      - name: run
+        run: |
+          echo "PULUMI_ACCESS_TOKEN = $PULUMI_ACCESS_TOKEN"
+          echo "GITHUB_TOKEN = $GITHUB_TOKEN"
